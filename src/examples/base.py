@@ -43,5 +43,7 @@ import loggly
 
 def get_api():
     return loggly.API(
-        token = appier.conf("LOGGLY_TOKEN")
+        base_url = appier.conf("LOGSTASH_BASE_URL"),
+        username = appier.conf("LOGSTASH_USERNAME"),
+        password = appier.conf("LOGSTASH_PASSWORD")
     )
