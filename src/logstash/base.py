@@ -53,26 +53,22 @@ class API(
     def __init__(self, *args, **kwargs):
         appier.API.__init__(self, *args, **kwargs)
         self.base_url = appier.conf("LOGSTASH_BASE_URL", BASE_URL)
-        self.username = appier.conf("LOGSTASH_USERNAME", None)
-        self.timeout = appier.conf("LOGSTASH_PASSWORD", None)
         self.buffer_size = appier.conf("LOGSTASH_BUFFER_SIZE", 128)
         self.timeout = appier.conf("LOGSTASH_TIMEOUT", 30)
         self.base_url = kwargs.get("base_url", self.base_url)
-        self.token = kwargs.get("token", self.token)
         self.buffer_size = kwargs.get("buffer_size", self.buffer_size)
         self.timeout = kwargs.get("timeout", self.timeout)
         self.delayer = kwargs.get("delayer", None)
-        self._build_url()
         self._last_flush = time.time()
         self._buffer = []
 
     def log(self, payload, tag = "default", silent = True):
-        url = self.token_url + "tags/%s" % tag
+        url = self.base_url + "tags/%s" % tag
         contents = self.post(url, data_j = payload, silent = silent)
         return contents
 
     def log_bulk(self, logs, tag = "default", silent = True):
-        url = self.token_bulk_url + "tags/%s" % tag
+        url = self.base_url + "tags/%s" % tag
         buffer = []
         for log in logs:
             log_s = json.dumps(log)
@@ -113,12 +109,3 @@ class API(
         else: call_log()
         self._buffer = []
         self._last_flush = time.time()
-
-    def _build_url(self):
-        if not self.username:
-            raise appier.OperationalError(message = "No API key provided")
-        if not self.password:
-            raise appier.OperationalError(message = "No password provided")
-        self.auth_url = "https://%s:%s@%s/" % (
-            self.api_key, self.password, self.base_url
-        )

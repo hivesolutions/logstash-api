@@ -1,23 +1,23 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Hive Loggly API
+# Hive Logstash API
 # Copyright (c) 2008-2018 Hive Solutions Lda.
 #
-# This file is part of Hive Loggly API.
+# This file is part of Hive Logstash API.
 #
-# Hive Loggly API is free software: you can redistribute it and/or modify
+# Hive Logstash API is free software: you can redistribute it and/or modify
 # it under the terms of the Apache License as published by the Apache
 # Foundation, either version 2.0 of the License, or (at your option) any
 # later version.
 #
-# Hive Loggly API is distributed in the hope that it will be useful,
+# Hive Logstash API is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # Apache License for more details.
 #
 # You should have received a copy of the Apache License along with
-# Hive Loggly API. If not, see <http://www.apache.org/licenses/>.
+# Hive Logstash API. If not, see <http://www.apache.org/licenses/>.
 
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
@@ -43,7 +43,5 @@ import loggly
 
 def get_api():
     return loggly.API(
-        base_url = appier.conf("LOGSTASH_BASE_URL"),
-        username = appier.conf("LOGSTASH_USERNAME"),
-        password = appier.conf("LOGSTASH_PASSWORD")
+        base_url = appier.conf("LOGSTASH_BASE_URL")
     )
