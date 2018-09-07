@@ -46,6 +46,10 @@ BASE_URL = "http://localhost:8080/"
 """ The default base URL for single operations to be used
 when no other base URL value is provided to the constructor """
 
+BASE_BULK_URL = "http://localhost:8080/"
+""" The default base URL for bulk operations to be used
+when no other base URL value is provided to the constructor """
+
 class API(
     appier.API
 ):
@@ -53,9 +57,11 @@ class API(
     def __init__(self, *args, **kwargs):
         appier.API.__init__(self, *args, **kwargs)
         self.base_url = appier.conf("LOGSTASH_BASE_URL", BASE_URL)
+        self.base_bulk_url = appier.conf("LOGSTASH_BASE_BULK_URL", BASE_BULK_URL)
         self.buffer_size = appier.conf("LOGSTASH_BUFFER_SIZE", 128)
         self.timeout = appier.conf("LOGSTASH_TIMEOUT", 30)
         self.base_url = kwargs.get("base_url", self.base_url)
+        self.base_bulk_url = kwargs.get("base_bulk_url", self.base_bulk_url)
         self.buffer_size = kwargs.get("buffer_size", self.buffer_size)
         self.timeout = kwargs.get("timeout", self.timeout)
         self.delayer = kwargs.get("delayer", None)
@@ -74,8 +80,13 @@ class API(
             log_s = json.dumps(log)
             log_s = appier.legacy.bytes(log_s, encoding = "utf-8")
             buffer.append(log_s)
-        data = b"\n".join(buffer)
-        contents = self.post(url, data = data, silent = silent)
+        data = b"\n".join(buffer) + b"\n"
+        contents = self.post(
+            url,
+            data = data,
+            silent = silent,
+            mime = "application/x-ndjson"
+        )
         return contents
 
     def log_buffer(self, payload):

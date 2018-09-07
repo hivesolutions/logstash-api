@@ -39,9 +39,9 @@ __license__ = "Apache License, Version 2.0"
 
 import appier
 
-import loggly
+import logstash
 
 def get_api():
-    return loggly.API(
+    return logstash.API(
         base_url = appier.conf("LOGSTASH_BASE_URL")
     )
