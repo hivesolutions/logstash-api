@@ -42,8 +42,8 @@ import time
 
 import appier
 
-BASE_URL = "https://logs-01.Logstash.com/inputs/"
-""" The default base URL for bulk operations to be used
+BASE_URL = "http://localhost:8080/"
+""" The default base URL for single operations to be used
 when no other base URL value is provided to the constructor """
 
 class API(
