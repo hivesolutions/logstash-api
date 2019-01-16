@@ -89,8 +89,8 @@ class API(
             time.time() > self._last_flush + self.timeout
         if should_flush: self._flush_buffer()
 
-    def log_flush(self):
-        self._flush_buffer()
+    def log_flush(self, force = True):
+        self._flush_buffer(force = force)
 
     def _flush_buffer(self, force = False):
         # retrieves some references from the current instance that
@@ -110,7 +110,7 @@ class API(
         # schedules the call log operation and then empties the buffer
         # so that it's no longer going to be used (flushed), notice that
         # in case there's no delayer available calls the method immediately
-        if self.delayer: self.delayer(call_log)
+        if self.delayer and not force: self.delayer(call_log)
         else: call_log()
         self._buffer = []
         self._last_flush = time.time()
