@@ -4,10 +4,11 @@ Simple Python API client for [Logstash](https://www.elastic.co/products/logstash
 
 ## Configuration
 
-* `LOGSTASH_BASE_URL` (`str`) - The base URL value to be used to communicate using the Logstash API, should include username and password
-if HTTP Auth is used (defaults to `None`)
-* `LOGSTASH_BUFFER_SIZE` (`int`) - The size of the buffer (in number of entries) until the buffer is flushed (defaults to `128`)
-* `LOGSTASH_TIMEOUT` (`int`) - The timeout in seconds in seconds until the buffer is flushed (defaults to `30`)
+| Name | Type | Description |
+| ----- | ----- | ----- |
+| **LOGSTASH_BASE_URL** | `str` | The base URL value to be used to communicate using the Logstash API, should include username and password if HTTP Auth is used (defaults to `None`). |
+| **LOGSTASH_BUFFER_SIZE** | `int` | The size of the buffer (in number of entries) until the buffer is flushed (defaults to `128`). |
+| **LOGSTASH_TIMEOUT** | `int` | The timeout in seconds in seconds until the buffer is flushed (defaults to `30`). |
 
 ## License
 
