@@ -5,4 +5,4 @@ session.shelve*
 
 /dist
 /build
-/src/logstash_api.egg-info
+/src/logstash-api.egg-info
