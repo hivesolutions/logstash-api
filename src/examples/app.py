@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Logstash API
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2024 Hive Solutions Lda.
 #
 # This file is part of Hive Logstash API.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2024 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -41,14 +32,11 @@ import appier
 
 from . import base
 
+
 class LogstashApp(appier.WebApp):
 
     def __init__(self, *args, **kwargs):
-        appier.WebApp.__init__(
-            self,
-            name = "logstash",
-            *args, **kwargs
-        )
+        appier.WebApp.__init__(self, name="logstash", *args, **kwargs)
 
     @appier.route("/", "GET")
     def index(self):
@@ -58,20 +46,21 @@ class LogstashApp(appier.WebApp):
     def log(self, message):
         tag = self.field("tag", "default")
         api = self.get_api()
-        result = api.log(dict(message = message), tag = tag)
+        result = api.log(dict(message=message), tag=tag)
         return result
 
     @appier.route("/log_bulk", "GET")
     def log_bulk(self):
-        messages = self.field("messages", ["hello", "world"], cast = list)
+        messages = self.field("messages", ["hello", "world"], cast=list)
         tag = self.field("tag", "default")
         api = self.get_api()
-        messages_l = [dict(message = message) for message in messages]
-        result = api.log_bulk(messages_l, tag = tag)
+        messages_l = [dict(message=message) for message in messages]
+        result = api.log_bulk(messages_l, tag=tag)
         return result
 
     def get_api(self):
         return base.get_api()
+
 
 if __name__ == "__main__":
     app = LogstashApp()

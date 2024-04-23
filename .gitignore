@@ -3,6 +3,9 @@
 
 session.shelve*
 
+/.env
+/.venv
+
 /dist
 /build
 /src/logstash_api.egg-info

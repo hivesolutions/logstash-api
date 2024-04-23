@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Hive Logstash API
-# Copyright (c) 2008-2020 Hive Solutions Lda.
+# Copyright (c) 2008-2024 Hive Solutions Lda.
 #
 # This file is part of Hive Logstash API.
 #
@@ -22,16 +22,7 @@
 __author__ = "João Magalhães <joamag@hive.pt>"
 """ The author(s) of the module """
 
-__version__ = "1.0.0"
-""" The version of the module """
-
-__revision__ = "$LastChangedRevision$"
-""" The revision number of the module """
-
-__date__ = "$LastChangedDate$"
-""" The last change date of the module """
-
-__copyright__ = "Copyright (c) 2008-2020 Hive Solutions Lda."
+__copyright__ = "Copyright (c) 2008-2024 Hive Solutions Lda."
 """ The copyright for the module """
 
 __license__ = "Apache License, Version 2.0"
@@ -46,9 +37,8 @@ BASE_URL = "http://localhost:8080/"
 """ The default base URL for single operations to be used
 when no other base URL value is provided to the constructor """
 
-class API(
-    appier.API
-):
+
+class API(appier.API):
 
     def __init__(self, *args, **kwargs):
         appier.API.__init__(self, *args, **kwargs)
@@ -62,55 +52,60 @@ class API(
         self._last_flush = time.time()
         self._buffer = []
 
-    def log(self, payload, tag = "default", silent = True):
+    def log(self, payload, tag="default", silent=True):
         url = self.base_url + "tags/%s" % tag
-        contents = self.post(url, data_j = payload, silent = silent)
+        contents = self.post(url, data_j=payload, silent=silent)
         return contents
 
-    def log_bulk(self, logs, tag = "default", silent = True):
+    def log_bulk(self, logs, tag="default", silent=True, raise_e=False):
         url = self.base_url + "tags/%s" % tag
         buffer = []
         for log in logs:
-            log_s = json.dumps(log)
-            log_s = appier.legacy.bytes(log_s, encoding = "utf-8")
-            buffer.append(log_s)
+            try:
+                log_s = json.dumps(log)
+                log_s = appier.legacy.bytes(log_s, encoding="utf-8")
+                buffer.append(log_s)
+            except Exception:
+                if raise_e:
+                    raise
         data = b"\n".join(buffer)
-        contents = self.post(
-            url,
-            data = data,
-            silent = silent,
-            mime = "application/x-ndjson"
-        )
+        contents = self.post(url, data=data, silent=silent, mime="application/x-ndjson")
         return contents
 
     def log_buffer(self, payload):
         self._buffer.append(payload)
-        should_flush = len(self._buffer) >= self.buffer_size or\
-            time.time() > self._last_flush + self.timeout
-        if should_flush: self._flush_buffer()
+        should_flush = (
+            len(self._buffer) >= self.buffer_size
+            or time.time() > self._last_flush + self.timeout
+        )
+        if should_flush:
+            self._flush_buffer()
 
-    def log_flush(self, force = True):
-        self._flush_buffer(force = force)
+    def log_flush(self, force=True):
+        self._flush_buffer(force=force)
 
-    def _flush_buffer(self, force = False):
+    def _flush_buffer(self, force=False):
         # retrieves some references from the current instance that
         # are going to be used in the flush operation
         buffer = self._buffer
 
         # verifies if the buffer is empty and if that's the case and
         # the force flag is not set, returns immediately
-        if not buffer and not force: return
+        if not buffer and not force:
+            return
 
         # creates the lambda function that is going to be used for the
         # bulk flushing operation of the buffer, this is going to be
         # called on a delayed (async fashion) so that no blocking occurs
         # in the current logical flow
-        call_log = lambda: self.log_bulk(buffer, tag = "default")
+        call_log = lambda: self.log_bulk(buffer, tag="default")
 
         # schedules the call log operation and then empties the buffer
         # so that it's no longer going to be used (flushed), notice that
         # in case there's no delayer available calls the method immediately
-        if self.delayer and not force: self.delayer(call_log)
-        else: call_log()
+        if self.delayer and not force:
+            self.delayer(call_log)
+        else:
+            call_log()
         self._buffer = []
         self._last_flush = time.time()
