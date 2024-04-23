@@ -74,19 +74,19 @@ class API(appier.API):
         contents = self.post(url, data=data, silent=silent, mime="application/x-ndjson")
         return contents
 
-    def log_buffer(self, payload):
+    def log_buffer(self, payload, raise_e=False):
         self._buffer.append(payload)
         should_flush = (
             len(self._buffer) >= self.buffer_size
             or time.time() > self._last_flush + self.timeout
         )
         if should_flush:
-            self._flush_buffer()
+            self._flush_buffer(raise_e=raise_e)
 
     def log_flush(self, force=True):
         self._flush_buffer(force=force)
 
-    def _flush_buffer(self, force=False):
+    def _flush_buffer(self, force=False, raise_e=False):
         # retrieves some references from the current instance that
         # are going to be used in the flush operation
         buffer = self._buffer
@@ -100,7 +100,7 @@ class API(appier.API):
         # bulk flushing operation of the buffer, this is going to be
         # called on a delayed (async fashion) so that no blocking occurs
         # in the current logical flow
-        call_log = lambda: self.log_bulk(buffer, tag="default")
+        call_log = lambda: self.log_bulk(buffer, tag="default", raise_e=raise_e)
 
         # schedules the call log operation and then empties the buffer
         # so that it's no longer going to be used (flushed), notice that
