@@ -13,9 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Code structure to be compliant with `black`
-* Added `raise_e` param in the bulk dump of data
+*
 
 ### Fixed
 
 *
+
+## [0.1.1] - 2024-04-23
+
+### Changed
+
+* Code structure to be compliant with `black`
+* Added `raise_e` param in the bulk dump of data
