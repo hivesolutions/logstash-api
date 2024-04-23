@@ -57,7 +57,7 @@ class API(appier.API):
         contents = self.post(url, data_j=payload, silent=silent)
         return contents
 
-    def log_bulk(self, logs, tag="default", silent=True, raise_e=False):
+    def log_bulk(self, logs, tag="default", silent=True, raise_e=False, on_error=None):
         url = self.base_url + "tags/%s" % tag
         buffer = []
         for log in logs:
@@ -65,7 +65,9 @@ class API(appier.API):
                 log_s = json.dumps(log)
                 log_s = appier.legacy.bytes(log_s, encoding="utf-8")
                 buffer.append(log_s)
-            except Exception:
+            except Exception as exception:
+                if on_error:
+                    on_error(log, exception)
                 if raise_e:
                     raise
         data = b"\n".join(buffer)
