@@ -42,6 +42,7 @@ setuptools.setup(
     url="http://logstash-api.hive.pt",
     zip_safe=False,
     packages=["logstash"],
+    test_suite="logstash.test",
     package_dir={"": os.path.normpath("src")},
     install_requires=["appier"],
     classifiers=[
