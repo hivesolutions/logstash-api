@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-*
+* Warning-level logging for failed `log_bulk` and `_flush_buffer` operations with message count and error details
 
 ### Changed
 

@@ -30,6 +30,7 @@ __license__ = "Apache License, Version 2.0"
 
 import json
 import time
+import logging
 
 import appier
 
@@ -71,7 +72,19 @@ class API(appier.API):
                 if raise_e:
                     raise
         data = b"\n".join(buffer)
-        contents = self.post(url, data=data, silent=silent, mime="application/x-ndjson")
+        try:
+            contents = self.post(
+                url, data=data, silent=silent, mime="application/x-ndjson"
+            )
+        except Exception as exception:
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                "Failed to send %d log(s) to logstash at '%s': %s"
+                % (len(buffer), url, exception)
+            )
+            if raise_e:
+                raise
+            return None
         return contents
 
     def log_buffer(self, payload, raise_e=False):
@@ -105,9 +118,17 @@ class API(appier.API):
         # schedules the call log operation and then empties the buffer
         # so that it's no longer going to be used (flushed), notice that
         # in case there's no delayer available calls the method immediately
-        if self.delayer and not force:
-            self.delayer(call_log)
-        else:
-            call_log()
+        try:
+            if self.delayer and not force:
+                self.delayer(call_log)
+            else:
+                call_log()
+        except Exception as exception:
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                "Failed to flush %d logstash log(s): %s" % (len(buffer), exception)
+            )
+            if raise_e:
+                raise
         self._buffer = []
         self._last_flush = time.time()
