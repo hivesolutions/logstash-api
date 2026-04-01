@@ -19,7 +19,9 @@ jobs:
           pip install black
           black . --check
         if: matrix.python-version == '3.14'
-      - run: python setup.py test
+      - run: |
+          pip install pytest
+          pytest
       - run: |
           pip install twine build
           python -m build
