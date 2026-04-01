@@ -38,6 +38,8 @@ BASE_URL = "http://localhost:8080/"
 """ The default base URL for single operations to be used
 when no other base URL value is provided to the constructor """
 
+logger = logging.getLogger(__name__)
+
 
 class API(appier.API):
 
@@ -77,7 +79,6 @@ class API(appier.API):
                 url, data=data, silent=silent, mime="application/x-ndjson"
             )
         except Exception as exception:
-            logger = logging.getLogger(__name__)
             logger.warning(
                 "Failed to send %d log(s) to logstash at '%s': %s"
                 % (len(buffer), url, exception)
@@ -124,7 +125,6 @@ class API(appier.API):
             else:
                 call_log()
         except Exception as exception:
-            logger = logging.getLogger(__name__)
             logger.warning(
                 "Failed to flush %d logstash log(s): %s" % (len(buffer), exception)
             )
