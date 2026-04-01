@@ -37,8 +37,6 @@ BASE_URL = "http://localhost:8080/"
 """ The default base URL for single operations to be used
 when no other base URL value is provided to the constructor """
 
-logger = logging.getLogger(__name__)
-
 
 class API(appier.API):
 

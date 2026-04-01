@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 *
 
+## [0.2.4] - 2026-04-01
+
+### Changed
+
+* Use appier's built-in logger (`self.logger`) instead of module-level `logging` in `log_bulk` and `_flush_buffer`
+* Removed unused module-level `logger` variable and `logging` import from `base.py`
+
 ## [0.2.3] - 2026-04-01
 
 ### Fixed
