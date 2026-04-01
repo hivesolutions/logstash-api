@@ -30,6 +30,7 @@ __license__ = "Apache License, Version 2.0"
 
 import json
 import time
+import threading
 
 import appier
 
@@ -51,6 +52,7 @@ class API(appier.API):
         self.delayer = kwargs.get("delayer", None)
         self._last_flush = time.time()
         self._buffer = []
+        self._flush_lock = threading.RLock()
 
     def log(self, payload, tag="default", silent=True):
         url = self.base_url + "tags/%s" % tag
@@ -98,14 +100,21 @@ class API(appier.API):
         self._flush_buffer(force=force)
 
     def _flush_buffer(self, force=False, raise_e=False):
-        # retrieves some references from the current instance that
-        # are going to be used in the flush operation
-        buffer = self._buffer
+        with self._flush_lock:
+            # retrieves some references from the current instance that
+            # are going to be used in the flush operation
+            buffer = self._buffer
 
-        # verifies if the buffer is empty and if that's the case and
-        # the force flag is not set, returns immediately
-        if not buffer and not force:
-            return
+            # verifies if the buffer is empty and if that's the case and
+            # the force flag is not set, returns immediately
+            if not buffer and not force:
+                return
+
+            # clears the current buffer and updates the last flush timestamp
+            # before the actual flush to avoid duplicated messages being
+            # sent by concurrent threads
+            self._buffer = []
+            self._last_flush = time.time()
 
         # creates the lambda function that is going to be used for the
         # bulk flushing operation of the buffer, this is going to be
@@ -113,9 +122,8 @@ class API(appier.API):
         # in the current logical flow
         call_log = lambda: self.log_bulk(buffer, tag="default", raise_e=raise_e)
 
-        # schedules the call log operation and then empties the buffer
-        # so that it's no longer going to be used (flushed), notice that
-        # in case there's no delayer available calls the method immediately
+        # schedules the call log operation, runs outside the lock to avoid
+        # blocking other threads from buffering new messages
         try:
             if self.delayer and not force:
                 self.delayer(call_log)
@@ -127,5 +135,3 @@ class API(appier.API):
             )
             if raise_e:
                 raise
-        self._buffer = []
-        self._last_flush = time.time()

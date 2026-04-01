@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-*
+* Thread safety issue in `_flush_buffer` that could cause duplicate messages under concurrent access
 
 ## [0.2.4] - 2026-04-01
 
