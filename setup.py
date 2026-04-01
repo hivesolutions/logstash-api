@@ -33,7 +33,7 @@ import setuptools
 
 setuptools.setup(
     name="logstash-api",
-    version="0.2.1",
+    version="0.2.2",
     author="Hive Solutions Lda.",
     author_email="development@hive.pt",
     description="Logstash API Client",
