@@ -30,7 +30,6 @@ __license__ = "Apache License, Version 2.0"
 
 import json
 import time
-import logging
 
 import appier
 
@@ -79,7 +78,7 @@ class API(appier.API):
                 url, data=data, silent=silent, mime="application/x-ndjson"
             )
         except Exception as exception:
-            logger.warning(
+            self.logger.warning(
                 "Failed to send %d log(s) to logstash at '%s': %s"
                 % (len(buffer), url, exception)
             )
@@ -125,7 +124,7 @@ class API(appier.API):
             else:
                 call_log()
         except Exception as exception:
-            logger.warning(
+            self.logger.warning(
                 "Failed to flush %d logstash log(s): %s" % (len(buffer), exception)
             )
             if raise_e:
