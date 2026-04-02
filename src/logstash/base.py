@@ -60,7 +60,7 @@ class API(appier.API):
 
     def log(self, payload, tag="default", silent=True):
         url = self.base_url + "tags/%s" % tag
-        contents = self.post(url, data_j=payload, silent=silent)
+        contents = self.post(url, data_j=payload, silent=silent, retry=0, reuse=False)
         return contents
 
     def log_bulk(self, logs, tag="default", silent=True, raise_e=False, on_error=None):
@@ -79,7 +79,12 @@ class API(appier.API):
         data = b"\n".join(buffer)
         try:
             contents = self.post(
-                url, data=data, silent=silent, mime="application/x-ndjson"
+                url,
+                data=data,
+                silent=silent,
+                mime="application/x-ndjson",
+                retry=0,
+                reuse=False,
             )
         except Exception as exception:
             self.logger.warning(

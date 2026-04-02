@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-*
+* Disable retry and connection reuse in `log` and `log_bulk` HTTP POST calls
 
 ### Fixed
 
