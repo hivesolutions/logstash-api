@@ -58,12 +58,23 @@ class API(appier.API):
         self._buffer = []
         self._flush_lock = threading.RLock()
 
-    def log(self, payload, tag="default", silent=True):
+    def log(self, payload, tag="default", silent=True, retry=0, reuse=False):
         url = self.base_url + "tags/%s" % tag
-        contents = self.post(url, data_j=payload, silent=silent, retry=0, reuse=False)
+        contents = self.post(
+            url, data_j=payload, silent=silent, retry=retry, reuse=reuse
+        )
         return contents
 
-    def log_bulk(self, logs, tag="default", silent=True, raise_e=False, on_error=None):
+    def log_bulk(
+        self,
+        logs,
+        tag="default",
+        silent=True,
+        retry=0,
+        reuse=False,
+        raise_e=False,
+        on_error=None,
+    ):
         url = self.base_url + "tags/%s" % tag
         buffer = []
         for log in logs:
@@ -83,8 +94,8 @@ class API(appier.API):
                 data=data,
                 silent=silent,
                 mime="application/x-ndjson",
-                retry=0,
-                reuse=False,
+                retry=retry,
+                reuse=reuse,
             )
         except Exception as exception:
             self.logger.warning(
