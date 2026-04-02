@@ -34,7 +34,7 @@ import threading
 
 import appier
 
-VERSION = "0.2.5"
+VERSION = "0.3.0"
 """ The version of the API client, this is used for logging
 purposes and should be updated on each release of the client """
 
