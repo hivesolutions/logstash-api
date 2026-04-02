@@ -34,6 +34,10 @@ import threading
 
 import appier
 
+VERSION = "0.2.5"
+""" The version of the API client, this is used for logging
+purposes and should be updated on each release of the client """
+
 BASE_URL = "http://localhost:8080/"
 """ The default base URL for single operations to be used
 when no other base URL value is provided to the constructor """
@@ -88,11 +92,12 @@ class API(appier.API):
         return contents
 
     def log_buffer(self, payload, raise_e=False):
-        self._buffer.append(payload)
-        should_flush = (
-            len(self._buffer) >= self.buffer_size
-            or time.time() > self._last_flush + self.timeout
-        )
+        with self._flush_lock:
+            self._buffer.append(payload)
+            should_flush = (
+                len(self._buffer) >= self.buffer_size
+                or time.time() > self._last_flush + self.timeout
+            )
         if should_flush:
             self._flush_buffer(raise_e=raise_e)
 

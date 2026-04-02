@@ -9,15 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-*
+* `VERSION` constant in `base.py` for API client version tracking, exported from `__init__.py`
 
 ### Changed
 
-*
+* Updated release instructions in `AGENTS.md` to include `VERSION` value update
 
 ### Fixed
 
-*
+* Race condition in `log_buffer` where concurrent threads could both trigger a flush operation
 
 ## [0.2.5] - 2026-04-01
 
