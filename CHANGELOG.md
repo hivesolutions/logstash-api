@@ -13,11 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Allowed retry of connection in HTTP calls
+*
 
 ### Fixed
 
 *
+
+## [0.3.2] - 2026-04-08
+
+### Changed
+
+* Allowed retry of connection in HTTP calls
 
 ## [0.3.1] - 2026-04-02
 
