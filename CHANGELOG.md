@@ -13,11 +13,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Updated logging infrastructure
+*
 
 ### Fixed
 
 *
+
+## [0.4.0] - 2026-04-08
+
+### Added
+
+* Named logger support via `_log_name` class attribute for scoped logging instead of root logger
+* Logging example script in `src/examples/log.py`
+* VS Code launch configuration for running the log example
+
+### Changed
+
+* Use lazy log formatting (comma-separated args) instead of eager `%` formatting in warning calls
 
 ## [0.3.2] - 2026-04-08
 
