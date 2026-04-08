@@ -58,7 +58,7 @@ class API(appier.API):
         self._buffer = []
         self._flush_lock = threading.RLock()
 
-    def log(self, payload, tag="default", silent=True, retry=0, reuse=False):
+    def log(self, payload, tag="default", silent=True, retry=1, reuse=False):
         url = self.base_url + "tags/%s" % tag
         contents = self.post(
             url, data_j=payload, silent=silent, retry=retry, reuse=reuse
@@ -70,7 +70,7 @@ class API(appier.API):
         logs,
         tag="default",
         silent=True,
-        retry=0,
+        retry=1,
         reuse=False,
         raise_e=False,
         on_error=None,
