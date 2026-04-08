@@ -45,6 +45,10 @@ when no other base URL value is provided to the constructor """
 
 class API(appier.API):
 
+    _log_name = "logstash-api"
+    """ The name of the logger to be used by this API client,
+    if set a named logger is used instead of the root logger """
+
     def __init__(self, *args, **kwargs):
         appier.API.__init__(self, *args, **kwargs)
         self.base_url = appier.conf("LOGSTASH_BASE_URL", BASE_URL)
@@ -99,8 +103,10 @@ class API(appier.API):
             )
         except Exception as exception:
             self.logger.warning(
-                "Failed to send %d log(s) to logstash at '%s': %s"
-                % (len(buffer), url, exception)
+                "Failed to send %d log(s) to logstash at '%s': %s",
+                len(buffer),
+                url,
+                exception,
             )
             if raise_e:
                 raise
@@ -152,7 +158,7 @@ class API(appier.API):
                 call_log()
         except Exception as exception:
             self.logger.warning(
-                "Failed to flush %d logstash log(s): %s" % (len(buffer), exception)
+                "Failed to flush %d logstash log(s): %s", len(buffer), exception
             )
             if raise_e:
                 raise

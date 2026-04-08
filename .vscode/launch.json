@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+        "name": "Log Example",
+        "type": "debugpy",
+        "request": "launch",
+        "program": "src/examples/log.py",
+        "justMyCode": false,
+        "env": {
+            "PYTHONPATH": "src",
+            "LEVEL": "TRACE"
+        }
+    }]
+}
