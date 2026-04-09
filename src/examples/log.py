@@ -44,8 +44,6 @@ def main():
     api.logger.info("Logger level: %s", api.logger.level)
     api.logger.info("Logger handlers: %s", api.logger.handlers)
 
-    api.log({})
-
 
 if __name__ == "__main__":
     main()
